@@ -52,8 +52,19 @@
         <div class="col-sm-4">
           <h3 class="text-primary bold">Trades</h3>
           <div class="alert alert-primary">
-            Total (<span class="current-sencond-trade"></span>):
+            Total current seconds: <span class="current-sencond-trade"></span>
             <strong id="total-trade"></strong>
+          </div>
+          <div class="d-flex bg-secondary text-white">
+            <div
+              class="p-2 bg-success flex-fill total-trade-buy text-center"
+            ></div>
+            <div
+              class="p-2 bg-danger flex-fill total-trade-sell text-center"
+            ></div>
+            <div
+              class="p-2 bg-warning flex-fill total-trade-result text-center"
+            ></div>
           </div>
           <table class="table table-bordered" id="trades">
             <thead>
@@ -149,25 +160,43 @@
           var ws = new WebSocket(
             "wss://stream.binance.com:9443/ws/btcusdt@trade"
           );
-          var totalTrade = 0;
+          var totalTradeSell = 0;
+          var totalTradeBuy = 0;
 
           ws.onmessage = function ({ data }) {
-            var { T, p, q } = JSON.parse(data);
+            var { T, p, q, m } = JSON.parse(data); // m: true => SELL, m: false => BUY
             var time = formatDate(T);
+            var colorText = m ? "text-danger" : "text-success";
 
             $("#trades tbody").prepend(
-              "<tr><td>" + time + "</td><td>" + q + "</td></tr>"
+              "<tr class='" +
+                colorText +
+                "'><td>" +
+                time +
+                "</td><td>" +
+                q +
+                "</td></tr>"
             );
 
             var obj = isValidTime(T);
             if (obj.isValid) {
-              totalTrade += parseFloat(q);
-              $("#total-trade").html(totalTrade.toFixed(5) + " BTC");
+              if (m) {
+                totalTradeSell += parseFloat(q);
+              } else {
+                totalTradeBuy += parseFloat(q);
+              }
+
+              $(".total-trade-buy").html(totalTradeBuy.toFixed(5));
+              $(".total-trade-sell").html(totalTradeSell.toFixed(5));
+              $(".total-trade-result").html(
+                totalTradeBuy > totalTradeSell ? "BUY" : "SELL"
+              );
               $(".current-sencond-trade").html(obj.second + "s");
             }
 
             if (obj.second == 59) {
-              totalTrade = 0;
+              totalTradeSell = 0;
+              totalTradeBuy = 0;
 
               $("#trades tbody").html("");
             }
