@@ -16,7 +16,9 @@
 
   <body>
     <div class="container">
-      <div class="row"><div class="col-md-12 text-right">Version 1.1</div></div>
+      <div class="row">
+        <div class="col-md-12 text-right">Version 1.1.1</div>
+      </div>
       <div class="row">
         <div class="col-sm-4">
           <h3 class="text-success bold">Buy Order</h3>
@@ -94,7 +96,7 @@
           ws.onmessage = function ({ data }) {
             var { E, b, a } = JSON.parse(data);
             var time = formatDate(E);
-            var totalAmountBuy = calculateTotalAmount(b.pop());
+            var totalAmountBuy = calculateTotalAmount(b.splice(-1));
             var totalAmountSell = calculateTotalAmount(a);
             $("#buy-order tbody").prepend(
               "<tr><td>" + time + "</td><td>" + totalAmountBuy + "</td></tr>"
