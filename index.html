@@ -93,7 +93,7 @@
           ws.onmessage = function ({ data }) {
             var { E, b, a } = JSON.parse(data);
             var time = formatDate(E);
-            var totalAmountBuy = calculateTotalAmount(b);
+            var totalAmountBuy = calculateTotalAmount(b.pop());
             var totalAmountSell = calculateTotalAmount(a);
             $("#buy-order tbody").prepend(
               "<tr><td>" + time + "</td><td>" + totalAmountBuy + "</td></tr>"
