@@ -17,7 +17,7 @@
   <body>
     <div class="container">
       <div class="row">
-        <div class="col-md-12 text-right">Version 1.1.4</div>
+        <div class="col-md-12 text-right">Version 1.1.5</div>
       </div>
       <div class="row">
         <div class="col-sm-4">
@@ -68,6 +68,10 @@
             <div
               class="p-2 bg-warning flex-fill total-trade-result text-center"
             ></div>
+          </div>
+          <div class="alert alert-primary">
+           Current minutes: <span class="current-minutes-trade-2"></span>
+            <strong id="total-trade-2"></strong>
           </div>
           <div class="d-flex bg-secondary text-white" style="margin: 15px 0;">
             <div
@@ -180,7 +184,7 @@
         }
         return {
           isValid,
-          second: d.getSeconds(),
+          minutes: d.getMinutes(),
         };
       }      
 
@@ -227,6 +231,7 @@
             }
             
             var obj2 = isValidTime2(T);
+            $(".current-minutes-trade-2").html(obj.minutes);
             if (obj2.isValid) {
               if (m) {
                 totalTradeSell2 += parseFloat(q);
