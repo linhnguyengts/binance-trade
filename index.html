@@ -69,7 +69,7 @@
               class="p-2 bg-warning flex-fill total-trade-result text-center"
             ></div>
           </div>
-          <div class="d-flex bg-secondary text-white">
+          <div class="d-flex bg-secondary text-white" style="margin: 15px 0;">
             <div
               class="p-2 bg-success flex-fill total-trade-buy-2 text-center"
             ></div>
@@ -174,8 +174,12 @@
       
       function isValidTime2(time) {
         var d = new Date(time);
+        var isValid = false;
+        if((d.getMinutes() % 2 == 0 && d.getSeconds() < 31) || (d.getMinutes() % 2 != 0 && d.getSeconds() > 30)){
+          isValid = true;
+        }
         return {
-          isValid: (d.getMinutes() % 2 == 0 && d.getSeconds() < 31) || (d.getMinutes() % 2 != 0 && d.getSeconds() > 30),
+          isValid,
           second: d.getSeconds(),
         };
       }      
