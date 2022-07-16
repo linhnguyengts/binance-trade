@@ -17,7 +17,7 @@
   <body>
     <div class="container">
       <div class="row">
-        <div class="col-md-12 text-right">Version 1.1.3</div>
+        <div class="col-md-12 text-right">Version 1.1.4</div>
       </div>
       <div class="row">
         <div class="col-sm-4">
@@ -67,6 +67,17 @@
             ></div>
             <div
               class="p-2 bg-warning flex-fill total-trade-result text-center"
+            ></div>
+          </div>
+          <div class="d-flex bg-secondary text-white">
+            <div
+              class="p-2 bg-success flex-fill total-trade-buy-2 text-center"
+            ></div>
+            <div
+              class="p-2 bg-danger flex-fill total-trade-sell-2 text-center"
+            ></div>
+            <div
+              class="p-2 bg-warning flex-fill total-trade-result-2 text-center"
             ></div>
           </div>
           <table class="table table-bordered" id="trades">
@@ -160,6 +171,14 @@
           second: d.getSeconds(),
         };
       }
+      
+      function isValidTime2(time) {
+        var d = new Date(time);
+        return {
+          isValid: (d.getMinutes() % 2 == 0 && d.getSeconds() < 31) || (d.getMinutes() % 2 != 0 && d.getSeconds() > 30),
+          second: d.getSeconds(),
+        };
+      }      
 
       function runSocketTrade() {
         if ("WebSocket" in window) {
@@ -169,7 +188,9 @@
           );
           var totalTradeSell = 0;
           var totalTradeBuy = 0;
-
+          
+          var totalTradeSell2 = 0;
+          var totalTradeBuy2 = 0;
           ws.onmessage = function ({ data }) {
             var { T, p, q, m } = JSON.parse(data); // m: true => SELL, m: false => BUY
             var time = formatDate(T);
@@ -200,10 +221,28 @@
               );
               $(".current-sencond-trade").html(obj.second + "s");
             }
+            
+            var obj2 = isValidTime2(T);
+            if (obj2.isValid) {
+              if (m) {
+                totalTradeSell2 += parseFloat(q);
+              } else {
+                totalTradeBuy2 += parseFloat(q);
+              }
+
+              $(".total-trade-buy-2").html(totalTradeBuy2.toFixed(5));
+              $(".total-trade-sell-2").html(totalTradeSell2.toFixed(5));
+              $(".total-trade-result-2").html(
+                totalTradeBuy2 > totalTradeSell2 ? "BUY" : "SELL"
+              );
+
+            }
 
             if (obj.second == 59) {
               totalTradeSell = 0;
               totalTradeBuy = 0;
+              totalTradeSell2 = 0;
+              totalTradeBuy2 = 0;
 
               $("#trades tbody").html("");
             }
