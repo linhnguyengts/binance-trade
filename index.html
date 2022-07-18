@@ -178,12 +178,14 @@
       
       function isValidTime2(time) {
         var d = new Date(time);
-
+        var second = d.getSeconds();
+        var minutes = d.getMinutes();
+        var hour = d.getHours();
         return {
           isValid: true,
-          minutes: d.getMinutes(),
-          second: d.getSeconds(),
-          hour: d.getHours()
+          minutes: minutes < 10 ? '0' + minutes : minutes,
+          second: second < 10 ? '0' + second : second,
+          hour: hour < 10 ? '0' + hour : hour,
         };
       }      
 
