@@ -20,7 +20,7 @@
         <div class="col-md-12 text-right">Version 1.1.5</div>
       </div>
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-4 hidden">
           <h3 class="text-success bold">Buy Order</h3>
           <div class="alert alert-success">
             Total (<span class="current-sencond"></span>):
@@ -36,7 +36,7 @@
             <tbody></tbody>
           </table>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-4 hidden">
           <h3 class="text-danger bold">Sell Order</h3>
           <div class="alert alert-danger">
             Total (<span class="current-sencond"></span>):
@@ -178,13 +178,11 @@
       
       function isValidTime2(time) {
         var d = new Date(time);
-        var isValid = false;
-        if((d.getMinutes() % 2 == 0 && d.getSeconds() < 31) || (d.getMinutes() % 2 != 0 && d.getSeconds() > 30)){
-          isValid = true;
-        }
+
         return {
-          isValid,
+          isValid: true,
           minutes: d.getMinutes(),
+          second: d.getSeconds()
         };
       }      
 
@@ -203,7 +201,7 @@
             var { T, p, q, m } = JSON.parse(data); // m: true => SELL, m: false => BUY
             var time = formatDate(T);
             var colorText = m ? "text-danger" : "text-success";
-
+            /*
             $("#trades tbody").prepend(
               "<tr class='" +
                 colorText +
@@ -213,7 +211,7 @@
                 q +
                 "</td></tr>"
             );
-
+            */
             var obj = isValidTime(T);
             if (obj.isValid) {
               if (m) {
@@ -245,16 +243,15 @@
                 totalTradeBuy2 > totalTradeSell2 ? "BUY" : "SELL"
               );
 
-            } else {
-              totalTradeBuy2 = 0;
-              totalTradeSell2 = 0;
             }
+            if (obj2.second == 31) {
+              totalTradeSell = 0;
+              totalTradeBuy = 0;
+            }          
 
             if (obj.second == 59) {
               totalTradeSell = 0;
               totalTradeBuy = 0;
-              totalTradeSell2 = 0;
-              totalTradeBuy2 = 0;
 
               $("#trades tbody").html("");
             }
