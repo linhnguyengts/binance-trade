@@ -53,7 +53,7 @@
           </table>
         </div>
         <div class="col-sm-4">
-          <h3 class="text-primary bold">Trades - 10s</h3>
+          <h3 class="text-primary bold">Trades 40-60</h3>
           <div class="alert alert-primary">
             Total current seconds: <span class="current-sencond-trade"></span>
             <strong id="total-trade"></strong>
@@ -248,12 +248,12 @@
                 totalTradeBuy2 > totalTradeSell2 ? "BUY" : "SELL"
               );
             }
-            if (obj2.second == 51) {
+            if (obj2.second == 1) {
               totalTradeSell2 = 0;
               totalTradeBuy2 = 0;
             }
 
-            if (obj.second == 21) {
+            if (obj.second == 41) {
               totalTradeSell = 0;
               totalTradeBuy = 0;
 
